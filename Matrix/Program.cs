@@ -10,7 +10,9 @@ namespace Matrix
     {
         static void Main(string[] args)
         {
-
+            int[,] m = new int[,] {{ 5, 4}, { 1, 5 } };
+        
+            Matrix matrix = new Matrix(m);
         }
     }
 }
