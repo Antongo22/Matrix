@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,27 +10,40 @@ namespace Matrix
     internal class Matrix
     {
         int[,] matrix;
+        string filename = "data.txt";
 
         public Matrix(int[,] matrix) 
         { 
+            File.Create(filename).Close();
             this.matrix=matrix;
 
             ShowMatrix(matrix);
 
-            Console.WriteLine(SolutionMatrix(matrix));
+            //Console.WriteLine(SolutionMatrix(matrix));
         }
         
+        public void Culc()
+        {
+            Console.WriteLine(SolutionMatrix(matrix));
+            File.AppendAllText(filename, "\n" + matrix);
+        }
+
         void ShowMatrix(int[,] matrix)
         {
             for(int i = 0; i < matrix.GetLength(0); i++)
             {
+                File.AppendAllText(filename, "|");
                 Console.Write("|");
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
-                    Console.Write("  " + matrix[i, j] + ", ");
+                    File.AppendAllText(filename, "" + matrix[i, j] + ",\t");
+                    Console.Write("" + matrix[i, j] + ",\t");
                 }
+                File.AppendAllText(filename, "|\n");
                 Console.WriteLine("|");
             }
+            Console.WriteLine();
+            File.AppendAllText(filename, "\n");
         }
 
 
@@ -67,7 +81,7 @@ namespace Matrix
                     }
 
                 }
-                Console.WriteLine();
+                //Console.WriteLine();
             }
 
             for (int i = 0; i < smallMatrix.GetLength(0); i++)
@@ -80,10 +94,11 @@ namespace Matrix
                     }
                 }
                 ShowMatrix(matrixM);
-                Console.WriteLine();
+                //Console.WriteLine();
                 int a = matrixMinor[i] * SolutionMatrix(matrixM);
                 //Console.WriteLine(a);
-                solution += i % 2 == 0 ? a : (-1*a);
+                a = i % 2 == 0 ? a : (-1 * a);
+                solution += a;
             }
 
             return solution ;
