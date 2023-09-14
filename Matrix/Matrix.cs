@@ -46,13 +46,14 @@ namespace Matrix
             }
 
             int[] matrixMinor = new int[matrix.GetLength(0)];
-            
+            int[,] matrixM = new int[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
             int[,,] smallMatrix = new int[matrix.GetLength(0), matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
-
+            int solution = 0;
             
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
-                for (int j = 1; j < matrix.GetLength(0); j++)
+                matrixMinor[i] = matrix[0, i];              
+                for (int j = 0; j < matrix.GetLength(0); j++)
                 {
                     for (int k = 0; k < matrix.GetLength(1); k++)
                     {
@@ -60,7 +61,7 @@ namespace Matrix
                         {
                             //Console.WriteLine(matrix[j, k]);
                             smallMatrix[i, j - 1, (k < i ? k : k - 1) ] = matrix[j, k];
-                            Console.WriteLine(smallMatrix[i, j - 1, (k < i ? k : k - 1)]);
+                            //Console.WriteLine(smallMatrix[i, j - 1, (k < i ? k : k - 1)]);
                         }
 
                     }
@@ -69,23 +70,23 @@ namespace Matrix
                 Console.WriteLine();
             }
 
-            //Console.WriteLine("dsdd - " + smallMatrix.GetLength(2));
+            for (int i = 0; i < smallMatrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < smallMatrix.GetLength(1); j++)
+                {
+                    for (int k = 0; k < smallMatrix.GetLength(1); k++)
+                    {
+                        matrixM[j, k] = smallMatrix[i, j, k];                        
+                    }
+                }
+                ShowMatrix(matrixM);
+                Console.WriteLine();
+                int a = matrixMinor[i] * SolutionMatrix(matrixM);
+                //Console.WriteLine(a);
+                solution += i % 2 == 0 ? a : (-1*a);
+            }
 
-            //for (int i = 0; i < smallMatrix.GetLength(0); i++)
-            //{
-
-            //    for (int j = 1; j < smallMatrix.GetLength(1); j++)
-            //    {
-            //        Console.WriteLine();
-            //        for (int k = 0; k < smallMatrix.GetLength(2); k++)
-            //        {
-            //            Console.Write(" " + smallMatrix[i, j, k] + ", ");
-            //        }
-            //    }
-            //    Console.WriteLine(); Console.WriteLine(); Console.WriteLine();
-            //}
-
-            return 0;
+            return solution ;
         }
     }
 }
