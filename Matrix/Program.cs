@@ -19,6 +19,8 @@ namespace Matrix
         
             Matrix matrix = new Matrix(m);
             matrix.Culc();
+
+
         }
     }
 }
