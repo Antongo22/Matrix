@@ -93,12 +93,15 @@ namespace Matrix
                         matrixM[j, k] = smallMatrix[i, j, k];                        
                     }
                 }
+                File.AppendAllText(filename, matrixMinor[i] + "* " );
                 ShowMatrix(matrixM);
                 //Console.WriteLine();
                 int a = matrixMinor[i] * SolutionMatrix(matrixM);
                 //Console.WriteLine(a);
+                File.AppendAllText(filename,  "= " + a + "\n\n");
                 a = i % 2 == 0 ? a : (-1 * a);
                 solution += a;
+                
             }
 
             return solution ;
