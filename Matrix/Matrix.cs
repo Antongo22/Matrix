@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace Matrix
     internal class Matrix
     {
         int[,] matrix;
+        int[] kramer;
         string filename = "data.txt";
 
         public Matrix(int[,] matrix)
@@ -89,14 +91,61 @@ namespace Matrix
                         matrixM[j, k] = smallMatrix[i, j, k];
                     }
                 }
-                File.AppendAllText(filename,  matrixMinor[i] + "* ");
-                ShowMatrix(matrixM);
                 int a = matrixMinor[i] * SolutionMatrix(matrixM);
                 a = i % 2 == 0 ? a : (-1 * a);
                 solution += a;
             }
 
             return solution;
+        }
+
+        public void SetKramer(int[] arr)
+        {
+            kramer = arr;   
+        }
+
+        int[,] NewMatrix()
+        {
+            int[,] newMatrix = new int[matrix.GetLength(0), matrix.GetLength(1)];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    newMatrix[i, j] = matrix[i, j];
+                }
+            }
+            return newMatrix;
+        }
+
+        public void Kramer()
+        {
+            float d;
+            int[] delt = new int[matrix.GetLength(0)];
+           
+            d = SolutionMatrix(matrix);
+            if (d == 0.0f)
+            {
+                Console.WriteLine("Дельта равна 0, решений нет");
+                return;
+            }
+
+            for (int i = 0; i < matrix.GetLength(0);i++)
+            {
+                int[,] newMatrix = NewMatrix();
+
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    newMatrix[j, i] = kramer[j];
+                }
+                delt[i] = SolutionMatrix(newMatrix);
+           
+            }
+
+            for(int i = 0; i < delt.Length; i++)
+            {
+                File.AppendAllText(filename, $"\n{delt[i] / d}");
+                Console.WriteLine(delt[i] / d);
+            }
         }
     }
 }
