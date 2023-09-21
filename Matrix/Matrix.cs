@@ -18,11 +18,9 @@ namespace Matrix
             this.matrix = matrix;
 
             ShowMatrix(matrix);
-
-            //Console.WriteLine(SolutionMatrix(matrix));
         }
 
-        public void Culc()
+        public void CulcDeterminant()
         {
             int solution = SolutionMatrix(matrix);
             Console.WriteLine(solution);
@@ -74,15 +72,12 @@ namespace Matrix
                     {
                         if (k != i && j != 0)
                         {
-                            //Console.WriteLine(matrix[j, k]);
                             smallMatrix[i, j - 1, (k < i ? k : k - 1)] = matrix[j, k];
-                            //Console.WriteLine(smallMatrix[i, j - 1, (k < i ? k : k - 1)]);
                         }
 
                     }
 
                 }
-                //Console.WriteLine();
             }
 
             for (int i = 0; i < smallMatrix.GetLength(0); i++)
@@ -96,13 +91,9 @@ namespace Matrix
                 }
                 File.AppendAllText(filename,  matrixMinor[i] + "* ");
                 ShowMatrix(matrixM);
-                //Console.WriteLine();
                 int a = matrixMinor[i] * SolutionMatrix(matrixM);
-                //Console.WriteLine(a);
-                //File.AppendAllText(filename, "= " + a + "\n\n");
                 a = i % 2 == 0 ? a : (-1 * a);
                 solution += a;
-
             }
 
             return solution;

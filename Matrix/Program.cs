@@ -18,9 +18,7 @@ namespace Matrix
                 {21, -22, 23, -24, 25 } };
         
             Matrix matrix = new Matrix(m);
-            matrix.Culc();
-
-
+            matrix.CulcDeterminant();
         }
     }
 }
