@@ -214,11 +214,23 @@ namespace Matrix
             set => matrix[i, j] = value;
         }
 
+        /// <summary>
+        /// Получение длины матрицы
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
         int GetLength(int num)
         {
             return matrix.GetLength(num);
         }
 
+        /// <summary>
+        /// Сложение матриц
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
         {
             if(matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
@@ -233,6 +245,21 @@ namespace Matrix
                 for(int j = 0; j < newMatrix.GetLength(1); j++)
                 {
                     newMatrix[i, j] = matrix1[i, j] + matrix2[i, j];
+                }
+            }
+
+            return new Matrix(newMatrix);
+        }
+
+        public static Matrix operator *(Matrix matrix1, int num)
+        {
+            int[,] newMatrix = new int[matrix1.GetLength(0), matrix1.GetLength(1)];
+
+            for(int i = 0;  i < newMatrix.GetLength(0); i++)
+            {
+                for(int j = 0;j < newMatrix.GetLength(1); j++)
+                {
+                    newMatrix[i, j] = matrix1[i, j] * num;
                 }
             }
 

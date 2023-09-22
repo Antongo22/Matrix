@@ -24,9 +24,9 @@ namespace Matrix
             Matrix matrix = new Matrix(m);
             Matrix matrix2 = new Matrix(n);
 
-            Matrix newM = matrix+matrix2;
+            Matrix newM = matrix * 5;
 
-            newM.ShowMatrix();
+            //newM.ShowMatrix();
         }
     }
 }
