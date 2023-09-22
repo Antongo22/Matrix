@@ -42,7 +42,7 @@ namespace Matrix
         /// Вывод матрицы на экран
         /// </summary>
         /// <param name="matrix">Матрица для вывода</param>
-        void ShowMatrix(int[,] matrix)
+        public void ShowMatrix(int[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -206,6 +206,37 @@ namespace Matrix
                 File.AppendAllText(filename, $"\n{delt[i] / d}");
                 Console.WriteLine(delt[i] / d);
             }
+        }
+
+        int this[int i, int j]
+        {
+            get => matrix[i, j];
+            set => matrix[i, j] = value;
+        }
+
+        int GetLength(int num)
+        {
+            return matrix.GetLength(num);
+        }
+
+        public static Matrix operator +(Matrix matrix1, Matrix matrix2)
+        {
+            if(matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
+            {
+                throw new Exception("Матрицы не одинаковых размеров!");
+            }
+
+            int[,] newMatrix = new int[matrix1.GetLength(0), matrix1.GetLength(1)];
+
+            for(int i = 0;i < newMatrix.GetLength(0); i++)
+            {
+                for(int j = 0; j < newMatrix.GetLength(1); j++)
+                {
+                    newMatrix[i, j] = matrix1[i, j] + matrix2[i, j];
+                }
+            }
+
+            return new Matrix(newMatrix);
         }
     }
 }

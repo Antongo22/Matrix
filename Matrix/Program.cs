@@ -14,11 +14,19 @@ namespace Matrix
                 {1, -2, 1,}, 
                 {3, 1, -1 },
                 {-1, 1, 1  } };
-        
+
+            int[,] n = new int[,] {
+                {1, -2, 1,},
+                {3, 1, -1 },
+                {-1, 1, 1  } };
+
+
             Matrix matrix = new Matrix(m);
-            int[] k = { 1, 7, -3 };
-            matrix.SetKramer(k);
-            matrix.Kramer();
+            Matrix matrix2 = new Matrix(n);
+
+            Matrix newM = matrix+matrix2;
+
+            newM.ShowMatrix();
         }
     }
 }
