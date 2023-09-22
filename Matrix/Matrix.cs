@@ -265,5 +265,35 @@ namespace Matrix
 
             return new Matrix(newMatrix);
         }
+
+        public static Matrix operator *(Matrix matrix1, Matrix matrix2)
+        {
+            if (matrix1.GetLength(0) != matrix2.GetLength(1) || matrix1.GetLength(1) != matrix2.GetLength(0))
+            {
+                throw new Exception("Матрицы не подходят для умножения!");
+            }
+
+            int length = matrix1.GetLength(0) > matrix1.GetLength(1) ? matrix1.GetLength(1) : matrix1.GetLength(0);
+
+            int[,] newMatrix = new int[length, length];
+
+            int[,] baseMatrix = matrix1.GetLength(0) < matrix1.GetLength(1) ? matrix1.matrix : matrix2.matrix;
+            
+            for (int i = 0; i < newMatrix.GetLength(0); i++)
+            {
+                for (int k = 0; k < newMatrix.GetLength(1); k++)
+                {
+                    int res = 0;
+
+                    for (int j = 0; j < baseMatrix.GetLength(1); j++)
+                    {
+                        res += matrix1[i, j] + matrix2[j, i];
+                    }
+                    newMatrix[i, k] = res;
+                }                              
+            }
+
+            return new Matrix(newMatrix);
+        }
     }
 }
