@@ -10,9 +10,9 @@ namespace Matrix
 {
     internal class Matrix
     {
-        int[,] matrix;
-        int[] kramer;
-        string filename = "data.txt";
+        int[,] matrix; // сама матрица
+        int[] kramer; // массив для крамеров
+        string filename = "data.txt"; // имя файла для записи
 
         public Matrix(int[,] matrix)
         {
@@ -22,13 +22,26 @@ namespace Matrix
             ShowMatrix(matrix);
         }
 
+        /// <summary>
+        /// Вычисление определителя
+        /// </summary>
+        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
         public void CulcDeterminant()
-        {
+        {          
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("Матрица не одинаковых размеров!");
+            }
             int solution = SolutionMatrix(matrix);
             Console.WriteLine(solution);
             File.AppendAllText(filename, "\n" + solution);
         }
 
+
+        /// <summary>
+        /// Вывод матрицы на экран
+        /// </summary>
+        /// <param name="matrix">Матрица для вывода</param>
         void ShowMatrix(int[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
@@ -47,12 +60,43 @@ namespace Matrix
             File.AppendAllText(filename, "\n");
         }
 
+        /// <summary>
+        /// Вывод основной на экран
+        /// </summary>
+        /// <param name="matrix"></param>
+        public void ShowMatrix()
+        {
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                File.AppendAllText(filename, "|");
+                Console.Write("|");
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    File.AppendAllText(filename, "" + matrix[i, j] + ",\t");
+                    Console.Write("" + matrix[i, j] + ",\t");
+                }
+                File.AppendAllText(filename, "|\n");
+                Console.WriteLine("|");
+            }
+            Console.WriteLine();
+            File.AppendAllText(filename, "\n");
+        }
 
+        /// <summary>
+        /// Вычисление матрицы 2 на 2
+        /// </summary>
+        /// <param name="tMatrix">сама матрица</param>
+        /// <returns></returns>
         int Solution(int[,] tMatrix)
         {
             return tMatrix[0, 0] * tMatrix[1, 1] - tMatrix[0, 1] * tMatrix[1, 0];
         }
 
+        /// <summary>
+        /// Основное решение матрицы
+        /// </summary>
+        /// <param name="matrix">матрица для вычисления</param>
+        /// <returns></returns>
         int SolutionMatrix(int[,] matrix)
         {
             if (matrix.GetLength(0) == 2)
@@ -99,11 +143,19 @@ namespace Matrix
             return solution;
         }
 
-        public void SetKramer(int[] arr)
+        /// <summary>
+        /// Задаём крамеры
+        /// </summary>
+        /// <param name="arr"></param>
+        public void SetKramer(params int[] arr)
         {
             kramer = arr;   
         }
 
+        /// <summary>
+        /// Копирование матрицы не по ссылке
+        /// </summary>
+        /// <returns></returns>
         int[,] NewMatrix()
         {
             int[,] newMatrix = new int[matrix.GetLength(0), matrix.GetLength(1)];
@@ -117,8 +169,16 @@ namespace Matrix
             return newMatrix;
         }
 
+        /// <summary>
+        /// Вычисление крамера
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void Kramer()
         {
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("Матрица не одинаковых размеров!");
+            }
             float d;
             int[] delt = new int[matrix.GetLength(0)];
            
