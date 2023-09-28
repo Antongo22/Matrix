@@ -10,21 +10,16 @@ namespace Matrix
     {
         static void Main(string[] args)
         {
-            int[,] m = new int[,] {
-                {1, -2, 1,}, 
-                {3, 1, -1 },
-                {-1, 1, 1  } };
+            double[,] m = new double[,] {
+                {2, -1, 1,}, 
+                {0, -4, 5 },
+                {1, -2, 2  } };
 
-            int[,] n = new int[,] {
-                {1, -2, 1,},
-                {3, 1, -1 },
-                {-1, 1, 1  } };
 
 
             Matrix matrix = new Matrix(m);
-            Matrix matrix2 = new Matrix(n);
 
-            Matrix newM = matrix * 5;
+            matrix.CulcDeterminant();
 
             //newM.ShowMatrix();
         }

@@ -10,11 +10,11 @@ namespace Matrix
 {
     internal class Matrix
     {
-        int[,] matrix; // сама матрица
-        int[] kramer; // массив для крамеров
+        double[,] matrix; // сама матрица
+        double[] kramer; // массив для крамеров
         string filename = "data.txt"; // имя файла для записи
 
-        public Matrix(int[,] matrix)
+        public Matrix(double[,] matrix)
         {
             File.Create(filename).Close();
             this.matrix = matrix;
@@ -32,7 +32,7 @@ namespace Matrix
             {
                 throw new Exception("Матрица не одинаковых размеров!");
             }
-            int solution = SolutionMatrix(matrix);
+            double solution = SolutionMatrix(matrix);
             Console.WriteLine(solution);
             File.AppendAllText(filename, "\n" + solution);
         }
@@ -42,7 +42,7 @@ namespace Matrix
         /// Вывод матрицы на экран
         /// </summary>
         /// <param name="matrix">Матрица для вывода</param>
-        public void ShowMatrix(int[,] matrix)
+        public void ShowMatrix(double[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -87,7 +87,7 @@ namespace Matrix
         /// </summary>
         /// <param name="tMatrix">сама матрица</param>
         /// <returns></returns>
-        int Solution(int[,] tMatrix)
+        double Solution(double[,] tMatrix)
         {
             return tMatrix[0, 0] * tMatrix[1, 1] - tMatrix[0, 1] * tMatrix[1, 0];
         }
@@ -97,17 +97,17 @@ namespace Matrix
         /// </summary>
         /// <param name="matrix">матрица для вычисления</param>
         /// <returns></returns>
-        int SolutionMatrix(int[,] matrix)
+        double SolutionMatrix(double[,] matrix)
         {
             if (matrix.GetLength(0) == 2)
             {
                 return Solution(matrix);
             }
 
-            int[] matrixMinor = new int[matrix.GetLength(0)];
-            int[,] matrixM = new int[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
-            int[,,] smallMatrix = new int[matrix.GetLength(0), matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
-            int solution = 0;
+            double[] matrixMinor = new double[matrix.GetLength(0)];
+            double[,] matrixM = new double[matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
+            double[,,] smallMatrix = new double[matrix.GetLength(0), matrix.GetLength(0) - 1, matrix.GetLength(0) - 1];
+            double solution = 0;
 
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -135,7 +135,7 @@ namespace Matrix
                         matrixM[j, k] = smallMatrix[i, j, k];
                     }
                 }
-                int a = matrixMinor[i] * SolutionMatrix(matrixM);
+                double a = matrixMinor[i] * SolutionMatrix(matrixM);
                 a = i % 2 == 0 ? a : (-1 * a);
                 solution += a;
             }
@@ -147,7 +147,7 @@ namespace Matrix
         /// Задаём крамеры
         /// </summary>
         /// <param name="arr"></param>
-        public void SetKramer(params int[] arr)
+        public void SetKramer(params double[] arr)
         {
             kramer = arr;   
         }
@@ -156,9 +156,9 @@ namespace Matrix
         /// Копирование матрицы не по ссылке
         /// </summary>
         /// <returns></returns>
-        int[,] NewMatrix()
+        double[,] NewMatrix()
         {
-            int[,] newMatrix = new int[matrix.GetLength(0), matrix.GetLength(1)];
+            double[,] newMatrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
                 for (int j = 0; j < matrix.GetLength(1); j++)
@@ -179,8 +179,8 @@ namespace Matrix
             {
                 throw new Exception("Матрица не одинаковых размеров!");
             }
-            float d;
-            int[] delt = new int[matrix.GetLength(0)];
+            double d;
+            double[] delt = new double[matrix.GetLength(0)];
            
             d = SolutionMatrix(matrix);
             if (d == 0.0f)
@@ -191,7 +191,7 @@ namespace Matrix
 
             for (int i = 0; i < matrix.GetLength(0);i++)
             {
-                int[,] newMatrix = NewMatrix();
+                double[,] newMatrix = NewMatrix();
 
                 for (int j = 0; j < matrix.GetLength(1); j++)
                 {
@@ -208,7 +208,7 @@ namespace Matrix
             }
         }
 
-        int this[int i, int j]
+        double this[int i, int j]
         {
             get => matrix[i, j];
             set => matrix[i, j] = value;
@@ -238,7 +238,7 @@ namespace Matrix
                 throw new Exception("Матрицы не одинаковых размеров!");
             }
 
-            int[,] newMatrix = new int[matrix1.GetLength(0), matrix1.GetLength(1)];
+            double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
             for(int i = 0;i < newMatrix.GetLength(0); i++)
             {
@@ -253,7 +253,7 @@ namespace Matrix
 
         public static Matrix operator *(Matrix matrix1, int num)
         {
-            int[,] newMatrix = new int[matrix1.GetLength(0), matrix1.GetLength(1)];
+            double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
             for(int i = 0;  i < newMatrix.GetLength(0); i++)
             {
@@ -275,15 +275,15 @@ namespace Matrix
 
             int length = matrix1.GetLength(0) > matrix1.GetLength(1) ? matrix1.GetLength(1) : matrix1.GetLength(0);
 
-            int[,] newMatrix = new int[length, length];
+            double[,] newMatrix = new double[length, length];
 
-            int[,] baseMatrix = matrix1.GetLength(0) < matrix1.GetLength(1) ? matrix1.matrix : matrix2.matrix;
+            double[,] baseMatrix = matrix1.GetLength(0) < matrix1.GetLength(1) ? matrix1.matrix : matrix2.matrix;
             
             for (int i = 0; i < newMatrix.GetLength(0); i++)
             {
                 for (int k = 0; k < newMatrix.GetLength(1); k++)
                 {
-                    int res = 0;
+                    double res = 0;
 
                     for (int j = 0; j < baseMatrix.GetLength(1); j++)
                     {
@@ -294,6 +294,11 @@ namespace Matrix
             }
 
             return new Matrix(newMatrix);
+        }
+
+        public double[,] FindT()
+        {
+            return new double[0, 0];
         }
     }
 }
