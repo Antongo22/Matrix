@@ -37,6 +37,21 @@ namespace Matrix
             File.AppendAllText(filename, "\n" + solution);
         }
 
+        /// <summary>
+        /// Вычисление определителя
+        /// </summary>
+        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
+        double CulcDeterminant(double[,] matrix)
+        {
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("Матрица не одинаковых размеров!");
+            }
+            double solution = SolutionMatrix(matrix);
+            File.AppendAllText(filename, "\n" + solution);
+            return solution;
+        }
+
 
         /// <summary>
         /// Вывод матрицы на экран
@@ -308,10 +323,62 @@ namespace Matrix
             return new Matrix(newMatrix); 
         }
 
-        
-        public double[,] FindT()
+        public double[,] Transpose()
         {
-            return new double[0, 0];
+            int size = matrix.GetLength(0);
+            double[,] transposedMatrix = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    transposedMatrix[i, j] = matrix[j, i];
+                }
+            }
+
+            return transposedMatrix;
+        }
+
+        public Matrix CalculateMinors()
+        {
+            int size = matrix.GetLength(0);
+            double[,] minors = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    double[,] tempMatrix = new double[size - 1, size - 1];
+                    int tempI = 0;
+                    int tempJ = 0;
+
+                    for (int row = 0; row < size; row++)
+                    {
+                        if (row == i)
+                            continue;
+
+                        for (int col = 0; col < size; col++)
+                        {
+                            if (col == j)
+                                continue;
+
+                            tempMatrix[tempI, tempJ] = matrix[row, col];
+                            tempJ++;
+                        }
+                        tempI++;
+                        tempJ = 0;
+                    }
+
+                    double minorValue = CulcDeterminant(tempMatrix);
+
+                    if ((i + j) % 2 != 0)
+                        minorValue = -minorValue;
+
+                    minors[i, j] = minorValue;
+                }
+            }
+
+            return new Matrix(minors); 
         }
     }
 }

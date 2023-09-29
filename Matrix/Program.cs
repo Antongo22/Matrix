@@ -11,9 +11,9 @@ namespace Matrix
         static void Main(string[] args)
         {
             double[,] n = new double[,] {
-                {7, 1, 2,},
-                {-2, 4, 0 },
-                {4, 5, 5 } };
+                {2, -1, 1,},
+                {0, -4, 5 },
+                {1, -2, 2 } };
 
             double[,] m = new double[,] {
                 {2, 8, 7 },
@@ -24,7 +24,7 @@ namespace Matrix
             Matrix matrix = new Matrix(n);
             Matrix matrix2 = new Matrix(m);
 
-            Matrix newM = matrix * matrix2;
+            Matrix newM = matrix.CalculateMinors();
 
             //newM.ShowMatrix();
         }
