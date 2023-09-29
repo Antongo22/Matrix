@@ -11,51 +11,29 @@ namespace Matrix
     internal class Matrix
     {
         double[,] matrix; // сама матрица
-        double[] kramer; // массив для крамеров
+        double[] kramer; // массив для задачи крамеров 
         string filename = "data.txt"; // имя файла для записи
-        double[] kramers; // результаты крамера
+        double[] kramers; // результаты вычисления крамера
+        double this[int i, int j] // индексатор (обращение к матрице)
+        {
+            get => matrix[i, j];
+            set => matrix[i, j] = value;
+        } 
 
         public Matrix(double[,] matrix)
         {
             File.Create(filename).Close();
             this.matrix = matrix;
-
-            ShowMatrix(matrix);
         }
 
-        /// <summary>
-        /// Вычисление определителя
-        /// </summary>
-        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
-        public double CulcDeterminant()
-        {          
-            if (matrix.GetLength(0) != matrix.GetLength(1))
-            {
-                throw new Exception("Матрица не одинаковых размеров!");
-            }
-            double solution = SolutionMatrix(matrix);
-            return solution;
-        }
 
-        /// <summary>
-        /// Вычисление определителя
-        /// </summary>
-        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
-        double CulcDeterminant(double[,] matrix)
-        {
-            if (matrix.GetLength(0) != matrix.GetLength(1))
-            {
-                throw new Exception("Матрица не одинаковых размеров!");
-            }
-            double solution = SolutionMatrix(matrix);
-            return solution;
-        }
+        #region Вывод информации
 
         /// <summary>
         /// Вывод матрицы на экран
         /// </summary>
         /// <param name="matrix">Матрица для вывода</param>
-        public void ShowMatrix(double[,] matrix)
+        void ShowMatrix(double[,] matrix)
         {
             for (int i = 0; i < matrix.GetLength(0); i++)
             {
@@ -93,6 +71,58 @@ namespace Matrix
             }
             Console.WriteLine();
             File.AppendAllText(filename, "\n");
+        }
+
+        /// <summary>
+        /// Вывод результатов вычислкения крамера
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public void ShowKramer()
+        {
+            if (kramers == null)
+            {
+                throw new Exception("Крамер не инициализрован!");
+            }
+
+            Console.Write("Результаты - ");
+            foreach (var item in kramers)
+            {
+                Console.Write(item + ", ");
+            }
+            Console.WriteLine();
+        }
+
+        #endregion
+
+
+        #region Оприделитель
+
+        /// <summary>
+        /// Вычисление определителя
+        /// </summary>
+        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
+        public double CulcDeterminant()
+        {          
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("Матрица не одинаковых размеров!");
+            }
+            double solution = SolutionMatrix(matrix);
+            return solution;
+        }
+
+        /// <summary>
+        /// Вычисление определителя
+        /// </summary>
+        /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
+        double CulcDeterminant(double[,] matrix)
+        {
+            if (matrix.GetLength(0) != matrix.GetLength(1))
+            {
+                throw new Exception("Матрица не одинаковых размеров!");
+            }
+            double solution = SolutionMatrix(matrix);
+            return solution;
         }
 
         /// <summary>
@@ -156,85 +186,10 @@ namespace Matrix
             return solution;
         }
 
-        /// <summary>
-        /// Копирование матрицы не по ссылке
-        /// </summary>
-        /// <returns></returns>
-        double[,] NewMatrix()
-        {
-            double[,] newMatrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
-            for (int i = 0; i < matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    newMatrix[i, j] = matrix[i, j];
-                }
-            }
-            return newMatrix;
-        }
+        #endregion
 
-        /// <summary>
-        /// Вычисление крамера
-        /// </summary>
-        /// <exception cref="Exception"></exception>
-        public double[] Kramer(bool isShow = false, params double[] arr)
-        {
-            kramer = arr;
 
-            if (matrix.GetLength(0) != matrix.GetLength(1))
-            {
-                throw new Exception("Матрица не одинаковых размеров!");
-            }
-            double d;
-            double[] delt = new double[matrix.GetLength(0)];
-            kramers = new double[matrix.GetLength(0)];
-
-            d = SolutionMatrix(matrix);
-            if (d == 0.0f)
-            {
-                throw new Exception("Дельта равна 0, решений нет");
-            }
-
-            for (int i = 0; i < matrix.GetLength(0);i++)
-            {
-                double[,] newMatrix = NewMatrix();
-
-                for (int j = 0; j < matrix.GetLength(1); j++)
-                {
-                    newMatrix[j, i] = kramer[j];
-                }
-                delt[i] = SolutionMatrix(newMatrix);
-           
-            }
-
-            for(int i = 0; i < delt.Length; i++)
-            {
-                kramers[i] = delt[i] / d;
-            }
-
-            if (isShow)
-            {
-                ShowKramer();
-            }
-
-            return kramers;
-        }
-
-        double this[int i, int j]
-        {
-            get => matrix[i, j];
-            set => matrix[i, j] = value;
-        }
-
-        /// <summary>
-        /// Получение длины матрицы
-        /// </summary>
-        /// <param name="num"></param>
-        /// <returns></returns>
-        int GetLength(int num)
-        {
-            return matrix.GetLength(num);
-        }
+        #region Переопредиление стандартных операций
 
         /// <summary>
         /// Сложение матриц
@@ -245,16 +200,16 @@ namespace Matrix
         /// <exception cref="Exception"></exception>
         public static Matrix operator +(Matrix matrix1, Matrix matrix2)
         {
-            if(matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
+            if (matrix1.GetLength(0) != matrix2.GetLength(0) || matrix1.GetLength(1) != matrix2.GetLength(1))
             {
                 throw new Exception("Матрицы не одинаковых размеров!");
             }
 
             double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
-            for(int i = 0;i < newMatrix.GetLength(0); i++)
+            for (int i = 0; i < newMatrix.GetLength(0); i++)
             {
-                for(int j = 0; j < newMatrix.GetLength(1); j++)
+                for (int j = 0; j < newMatrix.GetLength(1); j++)
                 {
                     newMatrix[i, j] = matrix1[i, j] + matrix2[i, j];
                 }
@@ -273,9 +228,9 @@ namespace Matrix
         {
             double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
-            for(int i = 0;  i < newMatrix.GetLength(0); i++)
+            for (int i = 0; i < newMatrix.GetLength(0); i++)
             {
-                for(int j = 0;j < newMatrix.GetLength(1); j++)
+                for (int j = 0; j < newMatrix.GetLength(1); j++)
                 {
                     newMatrix[i, j] = matrix1[i, j] * num;
                 }
@@ -317,8 +272,45 @@ namespace Matrix
                 }
             }
 
-            return new Matrix(newMatrix); 
+            return new Matrix(newMatrix);
         }
+
+        #endregion
+
+
+        #region Дополнительные операции
+
+        /// <summary>
+        /// Копирование матрицы не по ссылке
+        /// </summary>
+        /// <returns></returns>
+        double[,] NewMatrix()
+        {
+            double[,] newMatrix = new double[matrix.GetLength(0), matrix.GetLength(1)];
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    newMatrix[i, j] = matrix[i, j];
+                }
+            }
+            return newMatrix;
+        }
+
+        /// <summary>
+        /// Получение длины матрицы
+        /// </summary>
+        /// <param name="num"></param>
+        /// <returns></returns>
+        int GetLength(int num)
+        {
+            return matrix.GetLength(num);
+        }
+
+        #endregion
+
+
+        #region Вычисление обратной матрицы
 
         /// <summary>
         /// Вычисление T
@@ -385,7 +377,7 @@ namespace Matrix
                 }
             }
 
-            return minors; 
+            return minors;
         }
 
         /// <summary>
@@ -396,26 +388,66 @@ namespace Matrix
         public Matrix InverseMatrix()
         {
             double solution = CulcDeterminant(this.matrix);
-            if(solution == 0)
+            if (solution == 0)
             {
                 throw new Exception("У матрицы нет обратной матрицы!");
             }
 
             double[,] newM = (CalculateMinors(Transpose(matrix)));
 
-            Matrix mm = new Matrix(newM);
+            Matrix matx = new Matrix(newM);
 
-            return mm * (1.0 / solution);
+            return matx * (1.0 / solution);
         }
 
-        void ShowKramer()
+        #endregion
+
+
+        #region Дополнительные короткие вычисления
+
+        /// <summary>
+        /// Вычисление крамера
+        /// </summary>
+        /// <exception cref="Exception"></exception>
+        public double[] Kramer(params double[] arr)
         {
-            Console.Write("Результаты - ");
-            foreach (var item in kramers)
+            kramer = arr;
+
+            if (matrix.GetLength(0) != matrix.GetLength(1))
             {
-                Console.Write(item + ", ");
+                throw new Exception("Матрица не одинаковых размеров!");
             }
-            Console.WriteLine();
+            double d;
+            double[] delt = new double[matrix.GetLength(0)];
+            kramers = new double[matrix.GetLength(0)];
+
+            d = SolutionMatrix(matrix);
+            if (d == 0.0f)
+            {
+                throw new Exception("Дельта равна 0, решений нет");
+            }
+
+            for (int i = 0; i < matrix.GetLength(0); i++)
+            {
+                double[,] newMatrix = NewMatrix();
+
+                for (int j = 0; j < matrix.GetLength(1); j++)
+                {
+                    newMatrix[j, i] = kramer[j];
+                }
+                delt[i] = SolutionMatrix(newMatrix);
+
+            }
+
+            for (int i = 0; i < delt.Length; i++)
+            {
+                kramers[i] = delt[i] / d;
+            }
+
+            return kramers;
         }
+
+        #endregion
     }
+
 }

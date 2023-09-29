@@ -27,7 +27,7 @@ namespace Matrix
 
             //Matrix newM = matrix.InverseMatrix();
 
-            matrix2.Kramer(true, 2, -3, 1);
+            matrix2.Kramer(2, -3, 1);
             //newM.ShowMatrix();
         }
     }
