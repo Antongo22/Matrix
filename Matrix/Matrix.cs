@@ -52,7 +52,6 @@ namespace Matrix
             return solution;
         }
 
-
         /// <summary>
         /// Вывод матрицы на экран
         /// </summary>
@@ -272,7 +271,7 @@ namespace Matrix
         /// <param name="matrix1"></param>
         /// <param name="num"></param>
         /// <returns></returns>
-        public static Matrix operator *(Matrix matrix1, int num)
+        public static Matrix operator *(Matrix matrix1, double num)
         {
             double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
 
@@ -323,7 +322,7 @@ namespace Matrix
             return new Matrix(newMatrix); 
         }
 
-        public double[,] Transpose()
+        public double[,] Transpose(double[,] matrix)
         {
             int size = matrix.GetLength(0);
             double[,] transposedMatrix = new double[size, size];
@@ -339,7 +338,7 @@ namespace Matrix
             return transposedMatrix;
         }
 
-        public Matrix CalculateMinors()
+        public double[,] CalculateMinors(double[,] matrix)
         {
             int size = matrix.GetLength(0);
             double[,] minors = new double[size, size];
@@ -378,7 +377,22 @@ namespace Matrix
                 }
             }
 
-            return new Matrix(minors); 
+            return minors; 
+        }
+
+        public Matrix InverseMatrix()
+        {
+            double solution = CulcDeterminant(this.matrix);
+            if(solution == 0)
+            {
+                throw new Exception("У матрицы нет обратной матрицы!");
+            }
+
+            double[,] newM = (CalculateMinors(Transpose(matrix)));
+
+            Matrix mm = new Matrix(newM);
+
+            return mm * (1.0 / solution);
         }
     }
 }

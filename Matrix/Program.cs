@@ -24,7 +24,7 @@ namespace Matrix
             Matrix matrix = new Matrix(n);
             Matrix matrix2 = new Matrix(m);
 
-            Matrix newM = matrix.CalculateMinors();
+            Matrix newM = matrix.InverseMatrix();
 
             //newM.ShowMatrix();
         }
