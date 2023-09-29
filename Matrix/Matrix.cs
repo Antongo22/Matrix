@@ -94,7 +94,7 @@ namespace Matrix
 
         #endregion
 
-
+                
         #region Оприделитель
 
         /// <summary>
