@@ -13,6 +13,7 @@ namespace Matrix
         double[,] matrix; // сама матрица
         double[] kramer; // массив для крамеров
         string filename = "data.txt"; // имя файла для записи
+        double[] kramers;
 
         public Matrix(double[,] matrix)
         {
@@ -26,15 +27,14 @@ namespace Matrix
         /// Вычисление определителя
         /// </summary>
         /// <exception cref="Exception">Ошибка того, что матрица может быть не равномерной</exception>
-        public void CulcDeterminant()
+        public double CulcDeterminant()
         {          
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {
                 throw new Exception("Матрица не одинаковых размеров!");
             }
             double solution = SolutionMatrix(matrix);
-            Console.WriteLine(solution);
-            File.AppendAllText(filename, "\n" + solution);
+            return solution;
         }
 
         /// <summary>
@@ -48,7 +48,6 @@ namespace Matrix
                 throw new Exception("Матрица не одинаковых размеров!");
             }
             double solution = SolutionMatrix(matrix);
-            File.AppendAllText(filename, "\n" + solution);
             return solution;
         }
 
@@ -158,15 +157,6 @@ namespace Matrix
         }
 
         /// <summary>
-        /// Задаём крамеры
-        /// </summary>
-        /// <param name="arr"></param>
-        public void SetKramer(params double[] arr)
-        {
-            kramer = arr;   
-        }
-
-        /// <summary>
         /// Копирование матрицы не по ссылке
         /// </summary>
         /// <returns></returns>
@@ -187,20 +177,22 @@ namespace Matrix
         /// Вычисление крамера
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public void Kramer()
+        public double[] Kramer(params double[] arr)
         {
+            kramer = arr;
+
             if (matrix.GetLength(0) != matrix.GetLength(1))
             {
                 throw new Exception("Матрица не одинаковых размеров!");
             }
             double d;
             double[] delt = new double[matrix.GetLength(0)];
-           
+            kramers = new double[matrix.GetLength(0)];
+
             d = SolutionMatrix(matrix);
             if (d == 0.0f)
             {
-                Console.WriteLine("Дельта равна 0, решений нет");
-                return;
+                throw new Exception("Дельта равна 0, решений нет");
             }
 
             for (int i = 0; i < matrix.GetLength(0);i++)
@@ -217,9 +209,9 @@ namespace Matrix
 
             for(int i = 0; i < delt.Length; i++)
             {
-                File.AppendAllText(filename, $"\n{delt[i] / d}");
-                Console.WriteLine(delt[i] / d);
+                kramers[i] = delt[i] / d;
             }
+            return kramers;
         }
 
         double this[int i, int j]
@@ -327,7 +319,7 @@ namespace Matrix
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public double[,] Transpose(double[,] matrix)
+        double[,] Transpose(double[,] matrix)
         {
             int size = matrix.GetLength(0);
             double[,] transposedMatrix = new double[size, size];
@@ -348,7 +340,7 @@ namespace Matrix
         /// </summary>
         /// <param name="matrix"></param>
         /// <returns></returns>
-        public double[,] CalculateMinors(double[,] matrix)
+        double[,] CalculateMinors(double[,] matrix)
         {
             int size = matrix.GetLength(0);
             double[,] minors = new double[size, size];
@@ -408,6 +400,16 @@ namespace Matrix
             Matrix mm = new Matrix(newM);
 
             return mm * (1.0 / solution);
+        }
+
+        public void ShowKramer()
+        {
+            Console.Write("Результаты - ");
+            foreach (var item in kramers)
+            {
+                Console.Write(item + ", ");
+            }
+            Console.WriteLine();
         }
     }
 }
