@@ -251,6 +251,12 @@ namespace Matrix
             return new Matrix(newMatrix);
         }
 
+        /// <summary>
+        /// Умножение матрицы и числа
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="num"></param>
+        /// <returns></returns>
         public static Matrix operator *(Matrix matrix1, int num)
         {
             double[,] newMatrix = new double[matrix1.GetLength(0), matrix1.GetLength(1)];
@@ -266,6 +272,13 @@ namespace Matrix
             return new Matrix(newMatrix);
         }
 
+        /// <summary>
+        /// Умножение матриц
+        /// </summary>
+        /// <param name="matrix1"></param>
+        /// <param name="matrix2"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static Matrix operator *(Matrix matrix1, Matrix matrix2)
         {
             if (matrix1.GetLength(1) != matrix2.GetLength(0))
@@ -295,6 +308,7 @@ namespace Matrix
             return new Matrix(newMatrix); 
         }
 
+        
         public double[,] FindT()
         {
             return new double[0, 0];
