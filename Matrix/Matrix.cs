@@ -268,32 +268,31 @@ namespace Matrix
 
         public static Matrix operator *(Matrix matrix1, Matrix matrix2)
         {
-            if (matrix1.GetLength(0) != matrix2.GetLength(1) || matrix1.GetLength(1) != matrix2.GetLength(0))
+            if (matrix1.GetLength(1) != matrix2.GetLength(0))
             {
                 throw new Exception("Матрицы не подходят для умножения!");
             }
 
-            int length = matrix1.GetLength(0) > matrix1.GetLength(1) ? matrix1.GetLength(1) : matrix1.GetLength(0);
+            int rows = matrix1.GetLength(0);
+            int cols = matrix2.GetLength(1);
+            int commonDimension = matrix1.GetLength(1);
 
-            double[,] newMatrix = new double[length, length];
+            double[,] newMatrix = new double[rows, cols];
 
-            double[,] baseMatrix = matrix1.GetLength(0) < matrix1.GetLength(1) ? matrix1.matrix : matrix2.matrix;
-            
-            for (int i = 0; i < newMatrix.GetLength(0); i++)
+            for (int i = 0; i < rows; i++)
             {
-                for (int k = 0; k < newMatrix.GetLength(1); k++)
+                for (int j = 0; j < cols; j++)
                 {
-                    double res = 0;
-
-                    for (int j = 0; j < baseMatrix.GetLength(1); j++)
+                    double sum = 0;
+                    for (int k = 0; k < commonDimension; k++)
                     {
-                        res += matrix1[i, j] + matrix2[j, i];
+                        sum += matrix1[i, k] * matrix2[k, j];
                     }
-                    newMatrix[i, k] = res;
-                }                              
+                    newMatrix[i, j] = sum;
+                }
             }
 
-            return new Matrix(newMatrix);
+            return new Matrix(newMatrix); 
         }
 
         public double[,] FindT()
