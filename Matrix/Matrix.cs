@@ -322,6 +322,11 @@ namespace Matrix
             return new Matrix(newMatrix); 
         }
 
+        /// <summary>
+        /// Вычисление T
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
         public double[,] Transpose(double[,] matrix)
         {
             int size = matrix.GetLength(0);
@@ -338,6 +343,11 @@ namespace Matrix
             return transposedMatrix;
         }
 
+        /// <summary>
+        /// Вычисление минора
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
         public double[,] CalculateMinors(double[,] matrix)
         {
             int size = matrix.GetLength(0);
@@ -380,6 +390,11 @@ namespace Matrix
             return minors; 
         }
 
+        /// <summary>
+        /// Нахождение обратной матрицы
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public Matrix InverseMatrix()
         {
             double solution = CulcDeterminant(this.matrix);
