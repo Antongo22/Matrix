@@ -13,7 +13,7 @@ namespace Matrix
         double[,] matrix; // сама матрица
         double[] kramer; // массив для крамеров
         string filename = "data.txt"; // имя файла для записи
-        double[] kramers;
+        double[] kramers; // результаты крамера
 
         public Matrix(double[,] matrix)
         {
@@ -177,7 +177,7 @@ namespace Matrix
         /// Вычисление крамера
         /// </summary>
         /// <exception cref="Exception"></exception>
-        public double[] Kramer(params double[] arr)
+        public double[] Kramer(bool isShow = false, params double[] arr)
         {
             kramer = arr;
 
@@ -211,6 +211,12 @@ namespace Matrix
             {
                 kramers[i] = delt[i] / d;
             }
+
+            if (isShow)
+            {
+                ShowKramer();
+            }
+
             return kramers;
         }
 
@@ -402,7 +408,7 @@ namespace Matrix
             return mm * (1.0 / solution);
         }
 
-        public void ShowKramer()
+        void ShowKramer()
         {
             Console.Write("Результаты - ");
             foreach (var item in kramers)
